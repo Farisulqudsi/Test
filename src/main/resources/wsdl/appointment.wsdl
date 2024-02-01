@@ -1,0 +1,77 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+             xmlns:tns="http://example.org/appointment"
+             targetNamespace="http://example.org/appointment"
+             name="AppointmentService" xmlns:soap="http://www.w3.org/1999/xhtml">
+
+    <types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://example.org/appointment">
+            <element name="ScheduleRequest">
+                <complexType>
+                    <sequence>
+                        <element name="doctorId">
+                            <type>xsd:long</type>
+                        </element>
+                        <element name="patientId">
+                            <type>xsd:long</type>
+                        </element>
+                        <element name="startTime">
+                            <type>xsd:dateTime</type>
+                        </element>
+                        <element name="appointmentDuration">
+                            <type>xsd:duration</type>
+                        </element>
+                        <element name="numberOfAppointments">
+                            <type>xsd:int</type>
+                        </element>
+                    </sequence>
+                </complexType>
+            </element>
+            <element name="ScheduleResponse">
+                <complexType>
+                    <sequence>
+                        <element name="status">
+                            <type>xsd:string</type>
+                        </element>
+                        <element name="message">
+                            <type>xsd:string</type>
+                        </element>
+                    </sequence>
+                </complexType>
+            </element>
+        </schema>
+    </types>
+
+    <message name="ScheduleRequest">
+        <part name="parameters" element="tns:ScheduleRequest"/>
+    </message>
+
+    <message name="ScheduleResponse">
+        <part name="parameters" element="tns:ScheduleResponse"/>
+    </message>
+
+    <portType name="AppointmentPort">
+        <operation name="createSchedule">
+            <input message="tns:ScheduleRequest"/>
+            <output message="tns:ScheduleResponse"/>
+        </operation>
+    </portType>
+
+    <binding name="AppointmentBinding" type="tns:AppointmentPort">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="createSchedule">
+            <soap:operation soapAction="http://example.org/appointment/createSchedule"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+    <service name="AppointmentService">
+        <port name="AppointmentPort" binding="tns:AppointmentBinding">
+            <soap:address location="http://localhost:8080/ws"/>
+        </port>
+    </service>
+</definitions>
